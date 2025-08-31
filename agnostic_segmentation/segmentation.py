@@ -1,26 +1,36 @@
 import tensorflow as tf
 import numpy as np
 import os
-
-AGNOSTIC_CLASS_DICT = {
-    (0, 0, 0): 0, # Background
-    (0, 0, 254): 1, # Face
-    (0, 85, 85): 2, # Pants
-    (0, 254, 254): 3, # Right hand
-    (51, 169, 220): 4, # Left hand
-    (169, 254, 85): 5, # Right thigh
-    (85, 254, 169): 6, # Left thigh
-    (254, 0, 0): 7 # Hair
-}
+import cv2
+from pose_skeleton.extract_pose import get_mediapipe_skeleton
 
 model = tf.keras.models.load_model(os.path.join(os.getcwd(), '..', 'models', 'agnostic_segmentation.keras'))
 
-def agnostic_segmentation_inference(image) :
-  pred = model.predict(image)
-  pred = np.argmax(pred, axis=-1)
-  class_arr = np.array([pixel for pixel in AGNOSTIC_CLASS_DICT.keys()])
-  return class_arr[pred]
+def get_person_representations(image, size='small') :
+  if size not in ['small', 'large'] :
+    raise ValueError('Argument size must be either "small" or "large"')
+  else :
+    # standardize input shape
+    image_small = cv2.resize(image, (192, 256))
+    image_small = np.expand_dims(image_small, axis=0) / 255
 
-def combine(image, segmentation) :
-  segmentation = np.where(segmentation == (0, 0, 0), 0, 1)
-  return image * segmentation
+    image = cv2.resize(image, (384, 512))
+    image = np.expand_dims(image, axis=0) / 255
+
+    # get pose skeleton
+    pose_skeleton = get_mediapipe_skeleton(image_small[0])
+    pose_skeleton = np.expand_dims(pose_skeleton, axis=0)
+
+    # predict agnostic segmentation
+    agnostic_segmentation = model((image_small, pose_skeleton))
+    agnostic_segmentation = np.argmax(agnostic_segmentation, axis=-1)
+    agnostic_segmentation = np.expand_dims(np.where(agnostic_segmentation == 0, 0, 1), axis=-1).astype(np.float32)
+
+    if size != 'small' :
+      agnostic_segmentation = np.expand_dims(cv2.resize(agnostic_segmentation[0], (384, 512), interpolation=cv2.INTER_NEAREST), axis=-1)
+      agnostic_segmentation = np.expand_dims(agnostic_segmentation, axis=0)
+      agnostic_representation = image * agnostic_segmentation
+      pose_skeleton = np.expand_dims(get_mediapipe_skeleton(image[0]), axis=0)
+    else :
+      agnostic_representation = image_small * agnostic_segmentation
+  return agnostic_representation, pose_skeleton
