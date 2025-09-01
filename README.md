@@ -66,7 +66,7 @@ Open the inference folder. There is the _`inference.py`_ script, run it with thi
 python inference.py
 ```
 
-This command will do the inference given the _`example1.jpg`_ and _`cloth_example1.jpg`_ as the inputs. You could replace these images as your desire, either with the same name, or change the _`IMAGE_PATH`_ and _`CLOTH_IMAGE_PATH`_ value in the _`inference.py`_ script, precisely in the lines 9^th^ and 10^th^.
+This command will do the inference given the _`example1.jpg`_ and _`cloth_example1.jpg`_ as the inputs. You could replace these images as your desire, either with the same name, or change the _`IMAGE_PATH`_ and _`CLOTH_IMAGE_PATH`_ value in the _`inference.py`_ script, precisely in the lines 9 and 10.
 
 ```python
 ...
@@ -86,3 +86,14 @@ CLOTH_IMAGE_PATH = 'cloth_example1.jpg'
 4. [VITON-HD Dataset](https://www.kaggle.com/datasets/marquis03/high-resolution-viton-zalando-dataset/data)
 
 ---
+
+# **Further Development**
+---
+
+- Using dataset like Look Into Person (LIP) to train the agnostic segmentation model, so it could be more robust to data with noisy background.
+- Using meaningful pose guidance instead of the skeleton.
+- Explore the ways to handle occlusions for the warping model.
+- Consider deployment options.
+
+---
+William Devin, 2025
