@@ -14,7 +14,7 @@ Given an image of a person and an image of clothes mock-up, how to apply the moc
 
 ![Figure 1. The Pipeline Process](https://drive.google.com/uc?export=view&id=1LInCagyZkMfjGIR_5UictP1jNZ1PAgjN)
 
-The figure above shows the process of the developed pipeline. First, the pose skeleton is estimated with MediaPipe Pose Estimation model with the person image as the input. The person image and the pose skeleton become the inputs for the U-Net model to output the agnostic segmentation, where the clothes region and the background region are left off. Then, the person image is masked with the agnostic segmentation, resulting the agnostic representation. After that, the clothes mock-up image is segmented by a U-Net model. The agnostic representation, the pose skeleton, the clothes mock-up image, and the clothes segmentation are fed into the warping model to generate warped clothes. Final step, the agnostic representation, the pose skeleton, and the synthesized warped clothes become the input for the virtual try-on model to generate the virtual try-on image.
+The figure above shows the process of the developed pipeline. First, the pose skeleton is estimated with MediaPipe Pose Estimation model with the person image as the input. The person image and the pose skeleton become the inputs for the U-Net model to output the agnostic segmentation, where the clothes region and the background region are left off. Then, the person image is masked with the agnostic segmentation, resulting the agnostic representation. After that, the clothes mock-up image is segmented by the U-Net model. The agnostic representation, the pose skeleton, the clothes mock-up image, and the clothes segmentation are fed into the warping model to generate warped clothes. Final step, the agnostic representation, the pose skeleton, and the synthesized warped clothes become the input for the virtual try-on model to generate the virtual try-on image.
 
 ## :building_construction: **Models Architecture**
 
@@ -87,7 +87,7 @@ CLOTH_IMAGE_PATH = 'cloth_example1.jpg'
 
 ---
 
-# **Further Development**
+# 🔭 **Further Development**
 ---
 
 - Using dataset like Look Into Person (LIP) to train the agnostic segmentation model, so it could be more robust to data with noisy background.
