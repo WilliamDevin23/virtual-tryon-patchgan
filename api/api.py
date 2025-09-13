@@ -7,7 +7,7 @@ import os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 from try_on.try_on import generate_tryon
 
-app = Flask(__name__)
+api = Flask(__name__)
 
 @app.route('/', methods=['POST'])
 def generate_tryon_image() :
@@ -47,4 +47,4 @@ def generate_tryon_image() :
   )
   
 if __name__ == '__main__' :
-  app.run(debug=True)
+  api.run()
