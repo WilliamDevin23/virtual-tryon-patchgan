@@ -14,7 +14,7 @@ def generate_tryon(image, cloth_image, size='small') :
   if size == 'small' :
     cloth_image = cv2.resize(cloth_image, (192, 256))
   else :
-    cloth_image = cv2.resize(cloth_image, (384, 512), interpolation=cv2.INTER_LINEAR)
+    cloth_image = cv2.resize(cloth_image, (384, 512))
   cloth_image = np.expand_dims(cloth_image, axis=0) / 255
 
   if size == 'small' :
