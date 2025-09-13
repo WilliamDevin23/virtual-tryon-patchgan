@@ -47,4 +47,5 @@ def generate_tryon_image() :
   )
   
 if __name__ == '__main__' :
-  api.run()
+  port = int(os.environ.get('PORT', 8000))
+  api.run(host='0.0.0.0', port=port)
